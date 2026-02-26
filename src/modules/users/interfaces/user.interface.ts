@@ -22,6 +22,7 @@ export interface CreateUserInterface {
 
 
 export interface UpdateUserInterface {
+  id: string;
   name?: string;
   lastName?: string;
   avatar?: string;
@@ -39,4 +40,9 @@ export interface UpdateUserInterface {
 
   status?: UserStatusEnum;
   authProvider?: AuthProviderEnum;
+}
+
+export interface GetUserInterface {
+  id?: string;
+  email?: string;
 }

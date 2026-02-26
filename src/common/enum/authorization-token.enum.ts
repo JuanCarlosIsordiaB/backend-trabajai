@@ -1,0 +1,10 @@
+
+
+export enum AuthorizationToken{
+    CONFIRM_EMAIL,
+    CONFIRM_BACKUP_EMAIL,
+    CONFIRM_PHONE,
+    TWO_FACTOR,
+    CONFIRM_BACKUP_PHONE,
+    RECOVER_PASSWORD,
+}
