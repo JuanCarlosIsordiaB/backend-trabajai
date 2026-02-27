@@ -1,12 +1,16 @@
 import { Controller, Post, Body, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { TokensService } from '../tokens/tokens.service';
 import { AuthorizationToken } from 'src/common/enum';
+import { EmailsService } from '../emails/emails.service';
 
 const TEST_USER_ID = '9398ac2c-1644-488a-885b-307029e76ee8';
 
 @Controller('test')
 export class TestController {
-  constructor(private readonly tokenService: TokensService) {}
+  constructor(
+    private readonly tokenService: TokensService,
+    private readonly emailsService: EmailsService,
+  ) {}
 
   @Post('generate')
   async generate() {
@@ -24,4 +28,14 @@ export class TestController {
       token,
     });
   }
+
+  @Get('send-email')
+  async sendEmail() {
+    return await this.emailsService.sendEmail({
+      to: ['juancarlosisordiab@gmail.com'],
+      subject: 'Test Email',
+      html: '<h1>This is a test email</h1>',
+    });
+  }
+
 }
