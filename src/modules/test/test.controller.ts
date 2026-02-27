@@ -1,33 +1,27 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import type { CreateUserInterface } from '../users/interfaces/user.interface';
-import { BcryptService } from '../bcrypt/bcrypt.service';
+import { Controller, Post, Body, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { TokensService } from '../tokens/tokens.service';
+import { AuthorizationToken } from 'src/common/enum';
+
+const TEST_USER_ID = '9398ac2c-1644-488a-885b-307029e76ee8';
 
 @Controller('test')
 export class TestController {
-  constructor(private readonly bcryptService: BcryptService) {}
+  constructor(private readonly tokenService: TokensService) {}
 
-  @Post()
-  async test(@Body() data: any) {
-    const password = '1234';
-    const hashedPassword = '$2b$10$wXyE.g/MDtALQfriVkQQeudF4gGBm2uFUDBdEH5pc8zP4oJ5t9Zne';
-    return await this.bcryptService.compare(password, hashedPassword);
+  @Post('generate')
+  async generate() {
+    return await this.tokenService.generateToken({
+      userId: TEST_USER_ID,
+      type: AuthorizationToken.CONFIRM_EMAIL,
+    });
   }
 
-  @Post('create-user')
-  async createUser(@Body() data: CreateUserInterface) {
-    const { name, email, password } = data;
-    const hashedPassword = await this.bcryptService.hash(password);
-    return {
-      name,
-      email,
-      password: hashedPassword,
-    };
-  }
-
-  @Delete('delete-user')
-  async deleteUser() {
-    const userr = this.deleteUser();
-    return userr;
+  @Get('validate/:token')
+  async validate(@Param('token') token: string) {
+    return await this.tokenService.validateToken({
+      userId: TEST_USER_ID,
+      type: AuthorizationToken.CONFIRM_EMAIL,
+      token,
+    });
   }
 }
